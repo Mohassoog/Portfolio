@@ -50,21 +50,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const formData = new FormData(contactForm);
-                const response = await fetch("/", {
+                const response = await fetch(contactForm.action, {
                     method: 'POST',
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams(formData).toString()
                 });
                 
                 if (response.ok) {
-                    alert('تم إرسال رسالتك بنجاح إلى Netlify!');
+                    alert('تم إرسال رسالتك بنجاح! سيتم التواصل معك قريباً.');
                     contactForm.reset();
                 } else {
-                    alert('عذراً، حدث خطأ أثناء الإرسال لـ Netlify. يرجى المحاولة لاحقاً.');
+                    alert('فشل الإرسال: ' + response.statusText);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('عذراً، حدث خطأ في الشبكة. يرجى التأكد من اتصالك بالإنترنت والرفع على استضافة حقيقية.');
+                alert('خطأ في الشبكة: تأكد من رفع الموقع على Netlify قبل التجربة.');
             }
 
             // إعادة الزر لحالته الطبيعية
