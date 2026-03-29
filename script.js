@@ -51,19 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const formData = new FormData(contactForm);
                 
-                // إرسال البيانات بتنسيق URLSearchParams لضمان توافق Netlify AJAX
-                const response = await fetch("/", {
+                // إرسال البيانات بتنسيق URLSearchParams لضمان توافق Netlify
+                const response = await fetch(contactForm.getAttribute('action') || "/", {
                     method: 'POST',
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams(formData).toString()
                 });
                 
                 if (response.ok) {
-                    alert('✅ تم إرسال رسالتك بنجاح! شكراً لتواصلك معي.');
+                    alert('✅ تم إرسال رسالتك بنجاح! سأتواصل معك في أقرب وقت.');
                     contactForm.reset();
                 } else {
-                    const errorData = await response.text();
-                    alert('❌ فشل الإرسال (خطأ سيرفر): ' + response.status);
+                    alert('❌ فشل الإرسال. رمز الخطأ: ' + response.status + ' - ' + response.statusText);
                 }
             } catch (error) {
                 console.error('Error:', error);
