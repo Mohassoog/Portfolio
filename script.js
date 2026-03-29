@@ -50,22 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const formData = new FormData(contactForm);
-                const response = await fetch(contactForm.action, {
+                const response = await fetch("/", {
                     method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(formData).toString()
                 });
                 
                 if (response.ok) {
-                    alert('شكراً لك! تم إرسال رسالتك بنجاح، سأتواصل معك قريباً.');
+                    alert('تم إرسال رسالتك بنجاح إلى Netlify!');
                     contactForm.reset();
                 } else {
-                    const data = await response.json();
-                    if (data && Object.hasOwn(data, 'errors')) {
-                        alert('خطأ: ' + data["errors"].map(error => error["message"]).join(", "));
-                    } else {
-                        alert('عذراً، لم يتم قبول الرسالة. تأكد من تفعيل بريدك عبر الرسالة الواصلة من Formspree.');
-                    }
+                    alert('عذراً، حدث خطأ أثناء الإرسال لـ Netlify. يرجى المحاولة لاحقاً.');
                 }
             } catch (error) {
                 console.error('Error:', error);
