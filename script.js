@@ -48,23 +48,28 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'جاري الإرسال... <i class="fas fa-spinner fa-spin"></i>';
 
-            const formData = new FormData(contactForm);
-            const response = await fetch(contactForm.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            });
-            
-            if (response.ok) {
-                alert('شكراً لك! تم إرسال رسالتك بنجاح، سأتواصل معك قريباً.');
-                contactForm.reset();
-            } else {
-                const data = await response.json();
-                if (Object.hasOwn(data, 'errors')) {
-                    alert(data["errors"].map(error => error["message"]).join(", "));
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    alert('شكراً لك! تم إرسال رسالتك بنجاح، سأتواصل معك قريباً.');
+                    contactForm.reset();
                 } else {
-                    alert('عذراً، حدث خطأ ما في الإرسال. يرجى المحاولة لاحقاً.');
+                    const data = await response.json();
+                    if (data && Object.hasOwn(data, 'errors')) {
+                        alert('خطأ: ' + data["errors"].map(error => error["message"]).join(", "));
+                    } else {
+                        alert('عذراً، لم يتم قبول الرسالة. تأكد من تفعيل بريدك عبر الرسالة الواصلة من Formspree.');
+                    }
                 }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('عذراً، حدث خطأ في الشبكة. يرجى التأكد من اتصالك بالإنترنت والرفع على استضافة حقيقية.');
             }
 
             // إعادة الزر لحالته الطبيعية
