@@ -50,17 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const formData = new FormData(contactForm);
-                const response = await fetch(contactForm.action, {
+                
+                // إرسال البيانات بتنسيق URLSearchParams لضمان توافق Netlify AJAX
+                const response = await fetch("/", {
                     method: 'POST',
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams(formData).toString()
                 });
                 
                 if (response.ok) {
-                    alert('تم إرسال رسالتك بنجاح! سيتم التواصل معك قريباً.');
+                    alert('✅ تم إرسال رسالتك بنجاح! شكراً لتواصلك معي.');
                     contactForm.reset();
                 } else {
-                    alert('فشل الإرسال: ' + response.statusText);
+                    const errorData = await response.text();
+                    alert('❌ فشل الإرسال (خطأ سيرفر): ' + response.status);
                 }
             } catch (error) {
                 console.error('Error:', error);
