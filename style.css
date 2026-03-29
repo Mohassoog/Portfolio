@@ -587,7 +587,7 @@ nav ul li a:hover {
 /* توزيع الأشكال (10 أشكال متنوعة) */
 .shape1 { width: 50px; height: 50px; top: 10%; left: 10%; border-radius: 5px; animation-duration: 25s; }
 .shape2 { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 35px solid #4ef0a5; top: 30%; right: 15%; animation-delay: 2s; border-color: #fff; filter: drop-shadow(0 0 10px #fff); } /* مثلث أبيض */
-.shape3 { width: 30px; height: 30px; bottom: 20%; left: 15%; border-radius: 50%; border-color: #4ef0a5; } /* دائرة نيون */
+.bubble.circle { width: 30px; height: 30px; border-radius: 50%; border-color: #4ef0a5; } /* دائرة نيون */
 .shape4 { width: 60px; height: 60px; top: 50%; left: 25%; border-radius: 10px; opacity: 0.2; animation-duration: 30s; }
 .shape5 { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 55px solid #fff; bottom: 10%; right: 25%; animation-delay: 5s; filter: drop-shadow(0 0 10px #fff); } /* مثلث أبيض كبير */
 .shape6 { width: 40px; height: 40px; top: 70%; right: 40%; border-radius: 5px; animation-delay: 1s; }

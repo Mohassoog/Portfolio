@@ -34,41 +34,63 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     };
-});
 
-// JavaScript for Hamburger Menu Toggle
-let menuIcon = document.querySelector('#menu-icon');
-let navbar = document.querySelector('.navbar');
+    // معالجة إرسال الفورم
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
 
-menuIcon.onclick = () => {
-    menuIcon.classList.toggle('fa-bars');
-    menuIcon.classList.toggle('fa-xmark');
-    navbar.classList.toggle('active');
-};
+        contactForm.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            // إضافة حالة التحميل
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'جاري الإرسال... <i class="fas fa-spinner fa-spin"></i>';
 
-// إغلاق القائمة عند النقر على أي رابط (للموبايل)
-document.querySelectorAll('.navbar a').forEach(link => {
-    link.onclick = () => {
-        menuIcon.classList.remove('fa-xmark');
-        navbar.classList.remove('active');
-    };
-});
+            const formData = new FormData(contactForm);
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                alert('شكراً لك! تم إرسال رسالتك بنجاح، سأتواصل معك قريباً.');
+                contactForm.reset();
+            } else {
+                const data = await response.json();
+                if (Object.hasOwn(data, 'errors')) {
+                    alert(data["errors"].map(error => error["message"]).join(", "));
+                } else {
+                    alert('عذراً، حدث خطأ ما في الإرسال. يرجى المحاولة لاحقاً.');
+                }
+            }
 
-// معالجة إرسال الفورم بدون مغادرة الصفحة
-const contactForm = document.querySelector('form');
-contactForm.onsubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(contactForm);
-    const response = await fetch(contactForm.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-    });
-    
-    if (response.ok) {
-        alert('شكراً لك! تم إرسال رسالتك بنجاح، سأتواصل معك قريباً.');
-        contactForm.reset();
-    } else {
-        alert('عذراً، حدث خطأ ما. يرجى المحاولة مرة أخرى.');
+            // إعادة الزر لحالته الطبيعية
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        };
     }
-};
+
+    // JavaScript for Hamburger Menu Toggle
+    let menuIcon = document.querySelector('#menu-icon');
+    let navbar = document.querySelector('.navbar');
+
+    if (menuIcon && navbar) {
+        menuIcon.onclick = () => {
+            menuIcon.classList.toggle('fa-bars');
+            menuIcon.classList.toggle('fa-xmark');
+            navbar.classList.toggle('active');
+        };
+
+        // إغلاق القائمة عند النقر على أي رابط (للموبايل)
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.onclick = () => {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+                navbar.classList.remove('active');
+            };
+        });
+    }
+});
